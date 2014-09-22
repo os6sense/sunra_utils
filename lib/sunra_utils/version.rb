@@ -1,1 +1,5 @@
-VERSION = '0.0.1'
+module Sunra
+  module Utils
+    VERSION = '0.0.1'
+  end
+end
