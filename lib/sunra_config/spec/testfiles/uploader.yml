@@ -1,0 +1,7 @@
+archive_server_address: archive.somewhere.com
+archive_server_port: 80
+sftp_ssl_key: ftp_ssl_key
+sftp_username: a_user
+sftp_password: a_password
+archive_base_directory: /home/somewhere/sftp_test
+start_time: '01:00'

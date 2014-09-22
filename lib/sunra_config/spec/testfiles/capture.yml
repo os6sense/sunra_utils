@@ -1,0 +1,11 @@
+storage_dir: /home/leej/sunra/recordings
+additional_dir: hls
+url: http://localhost:8090/liveaudio.mp3
+port: 8090
+extension: mp3
+audio: -c:a copy
+video:
+
+ffmpeg: ffmpeg
+ffmpeg_opts:
+ffmpeg_verb: -v 0

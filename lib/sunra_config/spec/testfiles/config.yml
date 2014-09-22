@@ -1,0 +1,14 @@
+# **GLOBAL** configuraton files for settings which apply to
+# all sunra components
+studio_id: 5
+studio_name: STUDIO_NAME
+api_key: AN_API_KEY
+
+# Note that the following are configured for the services running under 
+# passenger. It is also possible to run them via rails s and rackup 
+# respectively and assign the appropriate ports.
+project_rest_api_url: http://localhost/project_manager
+recording_service_rest_api_url: http://localhost/recording_service
+recording_formats: mp4, mp3, mpg, hls
+
+local_store: /var/www/STORAGE
