@@ -8,8 +8,8 @@ module Sunra
     # and managing a lockfile
     class LockFile
 
-      # ==== Description 
-      # Define a new lockfile. Note that the lockfile # is *NOT* created until 
+      # ==== Description
+      # Define a new lockfile. Note that the lockfile # is *NOT* created until
       # you call +create+
       #
       # ==== Paramas
@@ -18,17 +18,17 @@ module Sunra
         @filename = filename
       end
 
-      # ==== Description 
+      # ==== Description
       # Create a lockfile, writing the contents of the +arr+ parameter
       #
       # ==== Params
       # +arr+:: an array to write to the lockfile. Note that each element
-      # will be written to the file with \r\n appended to it. If +arr+ 
-      # empty 
-      def create arr=[""]
+      # will be written to the file with \r\n appended to it. If +arr+
+      # empty
+      def create arr=['']
         arr = arr.to_array if arr.respond_to? :to_array
 
-        if arr.is_a? String or arr.is_a? Integer 
+        if arr.is_a? String or arr.is_a? Integer
           arr = [arr]
         end
 

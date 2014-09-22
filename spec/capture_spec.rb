@@ -1,115 +1,124 @@
-require_relative '../sunra_capture'
+require_relative '../lib/capture'
 
-describe Sunra::Capture do
+include Sunra::Utils
 
-  before :each do
+describe Capture do
+
+  before(:each) do
     @block_called = false
-    @config = double("config").as_null_object
-    @config.stub(:extension).and_return("mp3")
-    @config.stub(:storage_dir).and_return("a_dir")
 
-    Sunra::Capture::Logging.logger.stub(:error)
-    Sunra::Capture::Logging.logger.stub(:info)
-    Sunra::Capture::Logging.logger.stub(:warn)
+    @config = double('config').as_null_object
 
-    @capture = Sunra::Capture.new(@config) {
-      @block_called = true
-    }
+    allow(@config).to receive(:filename).and_return('')
+    allow(@config).to receive(:extension).and_return('mp3')
+    allow(@config).to receive(:storage_dir).and_return('a_dir')
+
+    allow(Capture::Logging.logger).to receive(:error)
+    allow(Capture::Logging.logger).to receive(:info)
+    allow(Capture::Logging.logger).to receive(:warn)
+
+    @capture = Capture.new(@config) { @block_called = true }
   end
 
   describe :initialize do
-    it "sets #pid to -1" do
-      @capture.pid.should eq -1
+    it 'sets #pid to -1' do
+      expect(@capture.pid).to eq(-1)
     end
 
-    it "sets #format to the value of config#extension" do
-      @capture.format.should eq "mp3"
+    it 'sets #format to the value of config#extension' do
+      expect(@capture.format).to eq 'mp3'
     end
 
-    it "sets #directory to the value of config#storage_dir" do
-      @capture.directory.should eq "a_dir"
+    it 'sets #directory to the value of config#storage_dir' do
+      expect(@capture.directory).to eq 'a_dir'
     end
   end
 
   describe :ffserver? do
-    context "when ffsever is running" do
-      it "returns true" do
-        Sunra::Capture::PS.stub(:get_pid).and_return(100)
-        Sunra::Capture.ffserver?.should eq true
+    context 'when ffsever is running' do
+      it 'returns true' do
+        allow(Capture::PS).to receive(:get_pid).and_return(100)
+        expect(Capture.ffserver?).to eq true
       end
     end
-    context "when ffsever is running" do
-      it "returns true" do
-        Sunra::Capture::PS.stub(:get_pid).and_return(-1)
-        Sunra::Capture.ffserver?.should eq false
+    context 'when ffsever is running' do
+      it 'returns true' do
+        allow(Capture::PS).to receive(:get_pid).and_return(-1)
+        expect(Capture.ffserver?).to eq false
       end
     end
+  end
+
+  def stubbed_datetime
+    ::DateTime.new(2014, 2, 3, 10, 11, 12, '+0')
+  end
+
+  def stub_datetime
+    allow(Capture::DateTime).to receive(:now).and_return(stubbed_datetime)
   end
 
   describe :time_as_filename do
-    context "when it is passed a date time" do
-      it "uses the date time to construct a formatted string" do
-        dt = DateTime.new(2014, 3, 4, 11, 12, 13, '+0')
-        Sunra::Capture.time_as_filename(dt).should eq "2014-03-04-111213"
+    before(:each) { stub_datetime }
+    context 'when it is passed a date time' do
+      it 'uses the date time to construct a formatted string' do
+        expect(Capture.time_as_filename(stubbed_datetime))
+          .to eq '2014-02-03-101112'
       end
     end
 
-    it "returns the datetime as a formatted string" do
-      Sunra::Capture::DateTime.stub(:now).and_return(
-        DateTime.new(2014, 2, 3, 10, 11, 12, '+0')
-      )
-      Sunra::Capture.time_as_filename.should eq "2014-02-03-101112"
+    it 'returns the datetime as a formatted string' do
+      expect(Capture.time_as_filename).to eq '2014-02-03-101112'
     end
   end
 
+  def stub_fileutils
+    allow(Capture::FileUtils).to receive(:mkdir_p).and_return(true)
+    allow(Capture).to receive(:ffserver?).and_return(true)
+  end
+
   describe :start do
-
-    before :each do
-      Sunra::Capture::DateTime.stub(:now).and_return(
-        DateTime.new(2014, 2, 3, 10, 11, 12, '+0')
-      )
-      Sunra::Capture::FileUtils.stub(:mkdir_p).and_return(true)
-      Sunra::Capture.stub(:ffserver?).and_return(true)
+    before(:each) do
+      stub_datetime
+      stub_fileutils
     end
 
-    context "if ffserver is not running" do
-      it "raises an error" do
-        Sunra::Capture.stub(:ffserver?).and_return(false)
-        expect{@capture.start}.to raise_error
+    context 'if ffserver is not running' do
+      it 'raises an error' do
+        allow(Capture).to receive(:ffserver?).and_return(false)
+        expect { @capture.start }.to raise_error
       end
     end
 
-    context "if the recorder is recording" do
-      it "returns the pid of the current recording process" do
-        pending
+    context 'if the recorder is recording' do
+      it 'returns the pid of the current recording process' do
       end
     end
 
-    it "sets #end_time to nil" do
+    it 'sets #end_time to nil' do
       @capture.start
-      @capture.end_time.should eq nil
+      expect(@capture.end_time).to eq nil
     end
 
-    it "sets start_time to DateTime.now" do
+    it 'sets start_time to DateTime.now' do
       @capture.start
-      @capture.start_time.should eq DateTime.new(2014, 2, 3, 10, 11, 12, '+0')
+      expect(@capture.start_time).to eq stubbed_datetime
     end
 
-    it "sets filename to the value of DateTime.now" do
+    it 'sets filename to the value of DateTime.now' do
       @capture.start
-      @capture.filename.should eq "2014-2-3-101112"
+      expect(@capture.filename).to eq '2014-02-03-101112.mp3'
     end
 
-    context "#directory does not exist" do
-      it "attempts to create #directory" do
-        expect(Sunra::Capture::FileUtils).to receive(:mkdir_p).once
+    context '#directory does not exist' do
+      it 'attempts to create #directory' do
+        expect(Capture::FileUtils).to receive(:mkdir_p).once
         @capture.start
       end
     end
 
-    it "returns the #pid of the spawned process" do
-      @capture.stub(:spawn).and_return(20000)
-      @capture.start.should eq 20000 
+    it 'returns the #pid of the spawned process' do
+      allow(@capture).to receive(:spawn).and_return(20_000)
+      expect(@capture.start).to eq 20_000
     end
   end
 
@@ -117,34 +126,28 @@ describe Sunra::Capture do
   end
 
   describe :status do
-  end 
+  end
 
   describe :stop do
-    before :each do
-      Sunra::Capture::DateTime.stub(:now).and_return(
-        DateTime.new(2014, 2, 3, 10, 11, 12, '+0')
-      )
-      Sunra::Capture::FileUtils.stub(:mkdir_p).and_return(true)
-      Sunra::Capture.stub(:ffserver?).and_return(true)
+    before(:each) do
+      stub_datetime
+      stub_fileutils
       @capture.start
-      # note: because ffserver isnt running the capture process will die
-      # and hence the recorder becomes "stopped" without calling stop.
-      Sunra::Capture::DateTime.stub(:now).and_return(
-        DateTime.new(2015, 2, 3, 10, 11, 12, '+0')
-      )
     end
-    context "the process terminates for whatever reason" do
+
+    context 'the process terminates for whatever reason' do
       before :each do
+        @capture.stop
         sleep 1
       end
-      it "should call the block passed to it initialised" do
-        @block_called.should eq true
+      it 'should call the block passed to it initialised' do
+        expect(@block_called).to eq true
       end
-      it "should set the pid to -" do
-        @capture.pid.should eq -1
+      it 'should set the pid to -' do
+        expect(@capture.pid).to eq(-1)
       end
-      it "should set the DateTime when it stopped to DateTime#now" do
-        @capture.end_time.should eq DateTime.new(2015, 2, 3, 10, 11, 12, '+0')
+      it 'should set the DateTime when it stopped to DateTime#now' do
+        expect(@capture.end_time).to eq stubbed_datetime
       end
     end
   end

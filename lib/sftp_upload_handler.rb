@@ -1,9 +1,11 @@
+require 'sunra_utils/logging'
+
 module Sunra
   module Utils
     module SFTP
-     # Callbacks for Net::SFTP
+      # Callbacks for Net::SFTP
       class UploadHandler
-        include SunraLogging
+        include Sunra::Utils::Logging
 
         attr_reader :local,
                     :remote,

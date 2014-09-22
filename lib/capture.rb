@@ -6,18 +6,16 @@
 require 'date'
 require 'fileutils'
 
-require 'sunra_logging'
-require 'sunra_ps'
+require_relative 'logging'
+require_relative 'ps'
 
 module Sunra
   module Utils
-
     # Class:: Sunra::Utils::Capture
     # Capture audio/video from ffserver by running instances of ffmpeg
     class Capture
-
-      include SunraLogging
-      include SunraPS
+      include Sunra::Utils::Logging
+      include Sunra::Utils::PS
 
       PROCESS_WATCH_TERMINATE_DELAY = 1
 
@@ -50,7 +48,7 @@ module Sunra
       # ==== Description
       # return true if ffserver process is running, false otherwise
       def self.ffserver?
-        return true if SunraPS::get_pid("ffserver") > 0
+        return true if PS::get_pid('ffserver') > 0
         return false
       end
 
@@ -94,12 +92,12 @@ module Sunra
       # the filename will be set to the start date and time using the
       # format '%Y-%m-%d-%H%M%S'
       # +subdir+::
-      def start(filename = "")
+      def start(filename = '')
         return @pid if is_recording?
 
-        if Sunra::Utils::Capture.ffserver?
+        if Capture.ffserver?
           @end_time = nil
-          @start_time = DateTime.now
+          @start_time = ::DateTime.now
 
           _set_filename(filename)
 
@@ -108,8 +106,9 @@ module Sunra
           # Start the ffmpeg capture program via spawn
           @pid = spawn(_create_command)
 
-          logger.info('capture.start') {
-            "Recording Started -- PID: #{@pid} FNAME: #{@filename}"}
+          logger.info('capture.start') do
+            "Recording Started -- PID: #{@pid} FNAME: #{@filename}"
+          end
 
           ProcessWatcher.new.watch(@pid) do
             logger.info('capture.start') { "Capture End Triggered #{@pid}" }
@@ -117,14 +116,16 @@ module Sunra
                       # Sleep in order to give a DIRECT call to stop
                       # the opportunity to kill the process and hence set
                       # pid to -1
-            stop()
+            stop
           end
 
           return @pid
         else
-          logger.error('capture.start') {
-            "Could not start recording, ffserver not found!"}
-          raise "Could not start recording, ffserver not found!"
+          logger.error('capture.start') do
+            'Could not start recording, ffserver not found!'
+          end
+
+          fail 'Could not start recording, ffserver not found!'
         end
       end
 
@@ -148,7 +149,7 @@ module Sunra
         oldpid = @pid
         kill @pid
         @pid = -1
-        @end_time = DateTime.now
+        @end_time = ::DateTime.now
 
         logger.info('capture.stop') do
           "Recording Stopped -- PID: #{oldpid} FILENAME: #{@filename}"
@@ -177,13 +178,16 @@ module Sunra
         if filename != ""
           @filename = filename
         else
-          @filename = Sunra::Utils::Capture.time_as_filename @start_time
+          @filename = Capture.time_as_filename @start_time
         end
 
         # allow override from the config
-        @filename = "#{@config.filename}" if @config.respond_to?("filename")
+        @filename = @config.filename if @config.respond_to?("filename") && \
+                                        @config.filename != ""
+
         @base_filename = @filename
         @filename += ".#{@config.extension}"
+
       end
     end
   end

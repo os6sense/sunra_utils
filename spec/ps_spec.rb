@@ -1,8 +1,10 @@
-require_relative '../sunra_ps.rb'
-include SunraPS
 # File:: ps_spec.rb
 
-describe SunraPS do
+require_relative '../lib/ps.rb'
+
+include Sunra::Utils::PS
+
+describe 'PS module' do
   before :each do
     @f_pid = Process.fork do
       # NB he 2 seconds sleep is important to reduce the amount of
@@ -14,16 +16,16 @@ describe SunraPS do
     sleep 0.5
   end
 
-  it "returns the pid of a running process as an Integer" do
+  it 'returns the pid of a running process as an Integer' do
     pid = get_pid('sleep')
-    pid.is_a?(Integer).should eq true
-    pid.should be > 0
+    expect(pid.is_a?(Integer)).to eq true
+    expect(pid).to be > 0
   end
 
   it "returns an array listing children of a running process" do
     pids = get_children(@f_pid)
-    pids.size.should be > 0
-    pids.is_a?(Array).should be true
+    expect(pids.size).to be > 0
+    expect(pids.is_a?(Array)).to be true
   end
 
   it "provides a kill method which kills a process by name" do
@@ -31,33 +33,33 @@ describe SunraPS do
     # to terminate, but the last one still to be running
     sleep 1
     kill "sleep"
-    get_pid('sleep').should eq 0
+    expect(get_pid('sleep')).to eq 0
   end
 
   it "provides a kill method which kills a process by id" do
     kill @f_pid
-    pid_exists?(@f_pid).should eq false
+    expect(pid_exists?(@f_pid)).to eq false
   end
 
   it "kills all child processes" do
     pids = get_children(@f_pid)
-    pids.size.should be > 0
+    expect(pids.size).to be > 0
     kill @f_pid, false, true
     pids = get_children(@f_pid)
-    pids.size.should be 0
-    pid_exists?(@f_pid).should eq false
+    expect(pids.size).to be 0
+    expect(pid_exists?(@f_pid)).to eq false
   end
 
   describe :port_open? do
     it "returns true if a port is openi (see assumed port)" do
-      if not (port_open?("localhost", 80).should eq true)
+      if not (expect(port_open?("localhost", 80)).to eq true)
         puts "ASSUMING POST 80 OPEN AS STANDARD: If this test fails please" \
             "check or change"
       end
     end
 
     it "returns false if a port is closed" do
-      port_open?("localhost", 198093).should eq false
+      expect(port_open?("localhost", 198093)).to eq false
     end
   end
 
@@ -73,15 +75,15 @@ describe SunraPS do
     end
 
     it "yields to the block on thread#join" do
-      @y.should be 0
+      expect(@y).to be 0
       @t.join
-      @y.should eq 1000
+      expect(@y).to eq 1000
     end
 
     it "yields to the block if the thread terminated" do
-      @y.should be 0
+      expect(@y).to be 0
       sleep 2
-      @y.should eq 1000
+      expect(@y).to eq 1000
     end
   end
 end

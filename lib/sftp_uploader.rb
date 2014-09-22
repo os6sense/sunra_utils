@@ -1,6 +1,5 @@
 require 'net/sftp'
 require 'forwardable'
-require 'sunra_logging'
 
 require_relative 'sftp_upload_handler'
 
