@@ -1,5 +1,6 @@
 ## Sunra Utils
 
+A collection of utilities used by the sunra suite of applications.
 
 ## Installation
 
@@ -17,4 +18,4 @@ Or install it yourself as:
 
 ## Usage
 
-Please see TODO: Sunra Homepage
+This gem is not intended for standalone usage. Please see TODO: Sunra Homepage
