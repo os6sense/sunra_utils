@@ -1,4 +1,4 @@
-require_relative '../../lib/config/capture.rb'
+require_relative '../../lib/sunra_utils/config/capture.rb'
 
 describe Sunra::Utils::Config::Capture do
   subject(:capcon) do

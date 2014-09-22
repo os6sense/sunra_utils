@@ -1,4 +1,4 @@
-require_relative '../../lib/config/uploader.rb'
+require_relative '../../lib/sunra_utils/config/uploader.rb'
 
 include Sunra::Utils::Config
 

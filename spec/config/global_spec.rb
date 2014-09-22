@@ -1,4 +1,4 @@
-require_relative '../../lib/config/global.rb'
+require_relative '../../lib/sunra_utils/config/global.rb'
 
 include Sunra::Utils::Config
 

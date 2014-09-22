@@ -1,4 +1,4 @@
-require_relative '../../lib/config/relay.rb'
+require_relative '../../lib/sunra_utils/config/relay.rb'
 
 include Sunra::Utils::Config
 

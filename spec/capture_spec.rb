@@ -1,4 +1,4 @@
-require_relative '../lib/capture'
+require_relative '../lib/sunra_utils/capture'
 
 include Sunra::Utils
 

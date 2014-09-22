@@ -4,9 +4,9 @@ require 'net/http'
 require 'rspec'
 require 'rspec/mocks'
 
-require_relative '../lib/config/uploader.rb'
-require_relative '../lib/sftp_uploader'
-require_relative '../lib/ps'
+require_relative '../lib/sunra_utils/config/uploader.rb'
+require_relative '../lib/sunra_util/sftp_uploader'
+require_relative '../lib/sunra_utils/ps'
 
 include Sunra::Utils::PS
 include Sunra::Utils::SFTP

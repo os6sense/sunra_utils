@@ -1,4 +1,4 @@
-require_relative '../../lib/config/hls.rb'
+require_relative '../../lib/sunra_utils/config/hls.rb'
 
 include Sunra::Utils::Config
 
