@@ -1,4 +1,4 @@
-require 'sunra_utils/logging'
+require_relative 'logging'
 
 module Sunra
   module Utils

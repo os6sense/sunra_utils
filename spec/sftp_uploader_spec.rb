@@ -1,16 +1,15 @@
-require 'spec_helper'
 require 'fileutils'
 require 'net/http'
+
 require 'rspec'
 require 'rspec/mocks'
-require 'sunra_config/uploader'
 
-require_relative '../sftp_uploader'
+require_relative '../lib/config/uploader.rb'
+require_relative '../lib/sftp_uploader'
+require_relative '../lib/ps'
 
-TODO: This has moved to its own gem
-# Required for port_open?
-require 'sunra_ps'
-include SunraPS
+include Sunra::Utils::PS
+include Sunra::Utils::SFTP
 
 TEST_ID = '58ac5ac64c60a3'
 TEST_REC_ID = '49'
@@ -18,7 +17,7 @@ TEST_FILE_NAME = 'testfile.mp3'
 LOCAL_TEST_DIR = "/tmp/#{TEST_ID}/#{TEST_REC_ID}"
 LOCAL_TEST_FILE = "#{LOCAL_TEST_DIR}/#{TEST_FILE_NAME}"
 
-describe SFTPUploader do
+describe Uploader do
 
   # ==== Description
   # Rather than depend on a file being present, create a file prior to
@@ -29,14 +28,13 @@ describe SFTPUploader do
       File.open(LOCAL_TEST_FILE, 'w+') { |f|
         1024 * 1024.times { f.write('1') } } unless File.exist? LOCAL_TEST_FILE
     end
-
   end
 
   # ==== Description
   # Create the configuration object and change the configuration file to
   # test_config.yml allowing us to configure test values for the server.
   def create_config
-    config = Sunra::Config::Uploader
+    config = Sunra::Utils::Config::Uploader
     config.bootstrap_on_require(
                        File.expand_path('./test_config.yml', __dir__))
     return config
@@ -49,16 +47,16 @@ describe SFTPUploader do
   # +upload_handler+:: An optional upload hadler for testing.
   def create_uploader(upload_handler = nil)
     config = create_config
-    uploader = SFTPUploader.new(config.archive_server_address,
-                            config.sftp_username,
-                            config.archive_base_directory,
-                            config.sftp_password)
+    uploader = Uploader.new(config.archive_server_address,
+                                config.sftp_username,
+                                config.archive_base_directory,
+                                config.sftp_password)
 
     return uploader
   end
 
   def mock_handler
-    handler = double("SFTUploadHandler")
+    handler = double('UploadHandler')
 
     #handler.stub(:on_open).with(anything())
     #handler.stub(:on_put).with(anything())
@@ -91,26 +89,26 @@ describe SFTPUploader do
   # Initialize
   ########################################################################
   describe :intialize do
-    before(:each) { @sftp = SFTPUploader.new('1', '2', '3') }
+    before(:each) { @sftp = Uploader.new('1', '2', '3') }
 
     it 'takes 3 parameters' do
-      @sftp.should_not be nil
+      expect(@sftp).to_not be nil
     end
 
     it 'sets the host' do
-      @sftp.host.should eq '1'
+      expect(@sftp.host).to eq '1'
     end
 
     it 'sets the username' do
-      @sftp.username.should eq '2'
+      expect(@sftp.username).to eq '2'
     end
 
     it 'sets the base_directory' do
-      @sftp.base_directory.should eq '3'
+      expect(@sftp.base_directory).to eq '3'
     end
 
     it 'takes an optional password parameter' do
-      SFTPUploader.new('1', '2', '3', 'password')
+      Uploader.new('1', '2', '3', 'password')
     end
   end
   ########################################################################
@@ -124,11 +122,11 @@ describe SFTPUploader do
     end
 
     it 'returns false if the target does not exist' do
-      @sftp.delete('this8329FiLeshould932NOTexisT.tmp').should eq false
+      expect(@sftp.delete('this8329FiLeshould932NOTexisT.tmp')).to eq false
     end
 
     it 'returns true if it deletes a file on the remote server' do
-      @sftp.delete(@filename).should eq true
+      expect(@sftp.delete(@filename)).to eq true
     end
   end
 
@@ -141,12 +139,12 @@ describe SFTPUploader do
     end
 
     it 'returns false if the target does not exist' do
-      @sftp.rmdir('this8329DirectorYshould932NOTexisT').should eq false
+      expect(@sftp.rmdir('this8329DirectorYshould932NOTexisT')).to eq false
     end
 
     it 'returns true if it removes a directory on the remote server' do
-      @sftp.mkdir('rspec_testdir_rmdir').should eq true
-      @sftp.rmdir('rspec_testdir_rmdir').should eq true
+      expect(@sftp.mkdir('rspec_testdir_rmdir')).to eq true
+      expect(@sftp.rmdir('rspec_testdir_rmdir')).to eq true
     end
   end
 
@@ -156,21 +154,21 @@ describe SFTPUploader do
   describe :mkdir do
     before(:all) do
       @sftp = create_uploader
-      @sftp.mkdir('rspec_testdir_mkdir').should eq true
+      expect(@sftp.mkdir('rspec_testdir_mkdir')).to eq true
     end
 
     it 'returns false if the target exists' do
-      @sftp.mkdir('rspec_testdir_mkdir').should eq false
+      expect(@sftp.mkdir('rspec_testdir_mkdir')).to eq false
     end
 
     it 'creates a directory on the remote server' do
-      @sftp.mkdir("#{TEST_ID}xx/").should eq true
+      expect(@sftp.mkdir("#{TEST_ID}xx/")).to eq true
     end
 
     after(:all) do
       @sftp = create_uploader
       @sftp.rmdir("#{TEST_ID}xx/")
-      @sftp.rmdir('rspec_testdir_mkdir').should eq true
+      expect(@sftp.rmdir('rspec_testdir_mkdir')).to eq true
     end
   end
 
@@ -187,15 +185,15 @@ describe SFTPUploader do
     end
 
     it 'uploads a file to the BASE_DIRECTORY of the server' do
-      @sftp.upload(LOCAL_TEST_FILE, '2013-09-11-180911.mp3').should eq true
+      expect(@sftp.upload(LOCAL_TEST_FILE, '2013-09-11-180911.mp3')).to eq true
     end
 
     it 'uploads a file to a SUB-DIRECTORY of the server' do
-      @sftp.upload(LOCAL_TEST_FILE, '49/2013-09-11-180911.mp3').should eq true
+      expect(@sftp.upload(LOCAL_TEST_FILE, '49/2013-09-11-180911.mp3')).to eq true
     end
 
     it 'uploads a file to a SUB-SUB-DIRECTORY of the server' do
-      @sftp.upload(LOCAL_TEST_FILE, 'JUNK/49/2013-09-11-180911.mp3').should eq true
+      expect(@sftp.upload(LOCAL_TEST_FILE, 'JUNK/49/2013-09-11-180911.mp3')).to eq true
     end
 
     after(:all) do
@@ -223,19 +221,19 @@ describe SFTPUploader do
     end
 
     it 'returns true if a file exists' do
-      @sftp.exists(@filename).should eq true
+      expect(@sftp.exists(@filename)).to eq true
     end
 
     it 'returns true if a directory exists' do
-      @sftp.exists(@dirname).should eq true
+      expect(@sftp.exists(@dirname)).to eq true
     end
 
     it 'returns false if a file does NOT exist' do
-      @sftp.exists('exist_test_should_not_exit.fil').should eq false
+      expect(@sftp.exists('exist_test_should_not_exit.fil')).to eq false
     end
 
     it 'returns false if a directory does NOT exist' do
-      @sftp.exists('exist_test_should_not_exist_dir').should eq false
+      expect(@sftp.exists('exist_test_should_not_exist_dir')).to eq false
     end
 
     after(:all) do

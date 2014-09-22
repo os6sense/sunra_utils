@@ -1,7 +1,7 @@
 # File:: lockfile_spec.rb
 
-require 'sunra_utils/lockfile'
-#require_relative '../lib/lockfile'
+#require 'sunra_utils/lockfile'
+require_relative '../lib/lockfile'
 
 describe Sunra::Utils::LockFile do
 

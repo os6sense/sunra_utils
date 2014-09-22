@@ -13,6 +13,8 @@ module Sunra
       # Provide a wrapper around net/sftp functionality to provide basic upload
       # capability.
       class Uploader
+        include Sunra::Utils::SFTP
+
         attr_accessor :host,
                       :base_directory,
                       :username,
@@ -23,7 +25,7 @@ module Sunra
 
         def_delegators :@upload_handler, :reset_status
 
-        class SFTPUploaderError < StandardError; end
+        class UploaderError < StandardError; end
 
         # ==== Description
         def initialize(host, username, directory, password = nil)
@@ -32,7 +34,7 @@ module Sunra
 
           # Create the default handler
           @_upload = nil
-          @upload_handler = SFTPUploadHandler.new
+          @upload_handler = UploadHandler.new
         end
 
         # ==== Description
@@ -58,7 +60,7 @@ module Sunra
         # system. If the path does not include +@base_directory+ this will be
         # prepended.  block will be called on completion
         def upload(local, remote, &block)
-          fail SFTPUploaderError, "local file not found: #{local}" \
+          fail UploaderError, "local file not found: #{local}" \
             unless File.exist?(local)
 
           upload_io(local, remote, &block)
