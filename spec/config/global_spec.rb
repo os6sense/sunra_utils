@@ -1,3 +1,4 @@
+$debug = true
 require_relative '../../lib/sunra_utils/config/global.rb'
 
 include Sunra::Utils::Config

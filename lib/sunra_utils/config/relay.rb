@@ -11,7 +11,7 @@ module Sunra
 
       # ==== Description
       # Provide access to Relay specific configuration paramameters.
-      class Relay
+      class Relay < Base
         singleton_class.class_eval do
           attr_accessor :command_name,
                         :capture_command,
@@ -29,9 +29,8 @@ module Sunra
         # ==== Params
         # +cfn+:: Configuration File Name. /etc/sunra/config.yml by default.
         def self.bootstrap_on_require cfn = "/etc/sunra/relay.yml"
-          fail "Relay configuration file [#{cfn}] not found." unless File.exist? cfn
+          cf = super
 
-          cf = YAML::load_file(cfn)
           @command_name      = cf['command_name']
           @capture_command   = cf['capture_command']
           @ffmpeg_pipe       = cf['ffmpeg_pipe']
@@ -40,7 +39,7 @@ module Sunra
           @cache_file        = cf['cache_file']
         end
 
-        self.bootstrap_on_require
+        bootstrap_on_require unless $debug
       end
     end
   end

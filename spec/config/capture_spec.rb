@@ -16,5 +16,4 @@ describe Sunra::Utils::Config::Capture do
     it { expect(capcon.ffmpeg_opts).to eq nil }
     it { expect(capcon.ffmpeg_verb).to eq '-v 0' }
   end
-
 end

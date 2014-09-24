@@ -13,7 +13,7 @@ module Sunra
 
       # Description::
       # Provides access to configuration values that apply for the uploader.
-      class HLS
+      class HLS < Base
         singleton_class.class_eval do
           attr_reader :hls_server_address,
                       :hls_server_port,
@@ -38,9 +38,7 @@ module Sunra
         # +cfn+:: Configuration File Name. /etc/sunra/hls_upload.yml by
         # default.
         def self.bootstrap_on_require(cfn = '/etc/sunra/hls_upload.yml')
-          fail "Configuration file [#{cfn}] not found." unless File.exist? cfn
-
-          cf = YAML::load_file(cfn)
+          cf = super
           @hls_base_directory         = cf['hls_base_directory']
           @hls_server_address         = cf['hls_server_address']
           @recording_server_api_key   = cf['recording_server_api_key']
@@ -52,7 +50,7 @@ module Sunra
           @monitor_class              = cf['monitor_class']
         end
 
-        bootstrap_on_require
+        bootstrap_on_require unless $debug
       end
     end
   end

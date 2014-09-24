@@ -4,6 +4,8 @@
 # expected to reside in /etc/sunra/archive.yml. It is important to note
 # that the configuration is loaded on require.
 
+require_relative 'base'
+
 module Sunra
   module Utils
     module Config
@@ -11,7 +13,7 @@ module Sunra
 
       # ==== Description
       # Provide access to Relay specific configuration paramameters.
-      class Archive
+      class Archive < Base
         singleton_class.class_eval do
           attr_accessor :mail_server,
                         :mail_server_port,
@@ -27,16 +29,15 @@ module Sunra
         # ==== Params
         # +cfn+:: Configuration File Name. /etc/sunra/config.yml by default.
         def self.bootstrap_on_require(cfn = '/etc/sunra/archive.yml')
-          fail "Relay configuration file [#{cfn}] not found." unless File.exist? cfn
+          cf = super
 
-          cf = YAML::load_file(cfn)
           @mail_server        = cf['mail_server']
           @mail_server_port   = cf['mail_server_port']
           @mail_username      = cf['mail_username']
           @mail_password      = cf['mail_password']
         end
 
-        self.bootstrap_on_require
+        bootstrap_on_require unless $debug
       end
     end
   end

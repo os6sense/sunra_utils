@@ -2,6 +2,7 @@
 # Description::
 # Provides a configuration class for the various sunra recorders.
 
+require_relative 'base'
 require 'yaml'
 
 module Sunra
@@ -10,7 +11,7 @@ module Sunra
       # Description::
       # Load configuration for a Capture task. Do not instanciate directly
       # rather create a class which inherits from Sunra::Config::Capture.
-      class Capture
+      class Capture < Base
         attr_accessor :storage_dir,
                       :add_dir,
                       :url,
