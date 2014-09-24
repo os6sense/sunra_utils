@@ -1,6 +1,6 @@
 #File:: sunra_service.rb
 
-require 'sunra_service/version'
+#require 'sunra_service/version'
 
 # ==== Description
 # Simple shared service wrapper to dry up ffserver-relay and failsafe-service
