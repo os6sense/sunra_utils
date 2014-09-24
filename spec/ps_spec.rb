@@ -1,5 +1,6 @@
 # File:: ps_spec.rb
 
+require_relative 'spec_helper'
 require_relative '../lib/sunra_utils/ps.rb'
 
 include Sunra::Utils::PS

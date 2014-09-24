@@ -1,3 +1,4 @@
+require_relative 'spec_helper'
 require_relative '../lib/sunra_utils/capture'
 
 include Sunra::Utils

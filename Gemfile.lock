@@ -33,6 +33,9 @@ GEM
     lumberjack (1.0.9)
     method_source (0.8.2)
     multi_json (1.10.1)
+    net-sftp (2.1.2)
+      net-ssh (>= 2.6.5)
+    net-ssh (2.9.1)
     pry (0.10.1)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -73,6 +76,7 @@ DEPENDENCIES
   codeclimate-test-reporter
   guard
   guard-rspec
+  net-sftp
   pry-byebug
   rake
   rspec

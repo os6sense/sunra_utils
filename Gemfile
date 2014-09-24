@@ -1,6 +1,7 @@
 source 'http://rubygems.org'
 
 gem 'rake'
+gem 'net-sftp'
 
 group :test do
   gem 'codeclimate-test-reporter', require: nil
