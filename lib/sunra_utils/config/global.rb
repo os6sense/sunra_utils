@@ -8,7 +8,6 @@ require_relative 'base'
 module Sunra
   module Utils
     module Config
-      require 'yaml'
 
       # ==== Description
       # Provides access to configuration values that apply across the sunra

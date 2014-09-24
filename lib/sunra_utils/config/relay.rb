@@ -4,10 +4,11 @@
 # expected to reside in /etc/sunra/relay.yml. It is important to note
 # that the configuration is loaded on require.
 
+require_relative 'base'
+
 module Sunra
   module Utils
     module Config
-      require 'yaml'
 
       # ==== Description
       # Provide access to Relay specific configuration paramameters.

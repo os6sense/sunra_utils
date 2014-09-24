@@ -1,3 +1,4 @@
+require_relative '../spec_helper'
 require_relative '../../lib/sunra_utils/config/capture.rb'
 
 describe Sunra::Utils::Config::Capture do

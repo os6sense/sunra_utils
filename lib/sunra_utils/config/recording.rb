@@ -15,7 +15,7 @@ module Sunra
       # of a given type that these can be configured independently hence
       # where as many of the sunra_config classes provide class based
       # access, recorders are *INSTANCE* based and hence must be instanciated.
-      module Recording < Base
+      module Recording
 
         # ==== Description
         # Configuration for MP3 based Capture.

@@ -6,10 +6,11 @@
 # nealy identical however a seperate config class is maintained to allow for
 # the hls server to be seperate to that of the archive server.
 
+require_relative 'base'
+
 module Sunra
   module Utils
     module Config
-      require 'yaml'
 
       # Description::
       # Provides access to configuration values that apply for the uploader.

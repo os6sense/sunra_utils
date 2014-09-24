@@ -2,7 +2,7 @@
 # Desctiption::
 # Configuration settings for the sunra failsafe service.
 
-require 'yaml'
+#require 'yaml'
 require 'sunra_utils/config/capture'
 
 module Sunra

@@ -3,10 +3,11 @@
 # Loads configuration settings for the sunra uploader which are expected
 # to reside in /etc/sunra/uploader.yml by default.
 
+require_relative 'base'
+
 module Sunra
   module Utils
     module Config
-      require 'yaml'
 
       # Description::
       # Provides access to configuration values that apply for the uploader.

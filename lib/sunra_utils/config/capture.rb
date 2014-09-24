@@ -3,7 +3,6 @@
 # Provides a configuration class for the various sunra recorders.
 
 require_relative 'base'
-require 'yaml'
 
 module Sunra
   module Utils
