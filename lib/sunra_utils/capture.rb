@@ -14,6 +14,7 @@ module Sunra
     # Class:: Sunra::Utils::Capture
     # Capture audio/video from ffserver by running instances of ffmpeg
     class Capture
+
       include Sunra::Utils::Logging
       include Sunra::Utils::PS
 
@@ -39,6 +40,7 @@ module Sunra
         @config = config
         @format = @config.extension
         @directory =  "#{@config.storage_dir}"
+
         @input = IO.pipe
 
         # The block will be called if the capture process terminates
@@ -187,7 +189,6 @@ module Sunra
 
         @base_filename = @filename
         @filename += ".#{@config.extension}"
-
       end
     end
   end

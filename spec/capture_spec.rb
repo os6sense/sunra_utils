@@ -13,11 +13,11 @@ describe Capture do
     allow(@config).to receive(:extension).and_return('mp3')
     allow(@config).to receive(:storage_dir).and_return('a_dir')
 
-    allow(Capture::Logging.logger).to receive(:error)
-    allow(Capture::Logging.logger).to receive(:info)
-    allow(Capture::Logging.logger).to receive(:warn)
+    allow(Sunra::Utils::Capture::Logging.logger).to receive(:error)
+    allow(Sunra::Utils::Capture::Logging.logger).to receive(:info)
+    allow(Sunra::Utils::Capture::Logging.logger).to receive(:warn)
 
-    @capture = Capture.new(@config) { @block_called = true }
+    @capture = Sunra::Utils::Capture.new(@config) { @block_called = true }
   end
 
   describe :initialize do
@@ -37,14 +37,14 @@ describe Capture do
   describe :ffserver? do
     context 'when ffsever is running' do
       it 'returns true' do
-        allow(Capture::PS).to receive(:get_pid).and_return(100)
-        expect(Capture.ffserver?).to eq true
+        allow(Sunra::Utils::Capture::PS).to receive(:get_pid).and_return(100)
+        expect(Sunra::Utils::Capture.ffserver?).to eq true
       end
     end
     context 'when ffsever is running' do
       it 'returns true' do
-        allow(Capture::PS).to receive(:get_pid).and_return(-1)
-        expect(Capture.ffserver?).to eq false
+        allow(Sunra::Utils::Capture::PS).to receive(:get_pid).and_return(-1)
+        expect(Sunra::Utils::Capture.ffserver?).to eq false
       end
     end
   end
@@ -54,26 +54,26 @@ describe Capture do
   end
 
   def stub_datetime
-    allow(Capture::DateTime).to receive(:now).and_return(stubbed_datetime)
+    allow(Sunra::Utils::Capture::DateTime).to receive(:now).and_return(stubbed_datetime)
   end
 
   describe :time_as_filename do
     before(:each) { stub_datetime }
     context 'when it is passed a date time' do
       it 'uses the date time to construct a formatted string' do
-        expect(Capture.time_as_filename(stubbed_datetime))
+        expect(Sunra::Utils::Capture.time_as_filename(stubbed_datetime))
           .to eq '2014-02-03-101112'
       end
     end
 
     it 'returns the datetime as a formatted string' do
-      expect(Capture.time_as_filename).to eq '2014-02-03-101112'
+      expect(Sunra::Utils::Capture.time_as_filename).to eq '2014-02-03-101112'
     end
   end
 
   def stub_fileutils
-    allow(Capture::FileUtils).to receive(:mkdir_p).and_return(true)
-    allow(Capture).to receive(:ffserver?).and_return(true)
+    allow(Sunra::Utils::Capture::FileUtils).to receive(:mkdir_p).and_return(true)
+    allow(Sunra::Utils::Capture).to receive(:ffserver?).and_return(true)
   end
 
   describe :start do
@@ -84,7 +84,7 @@ describe Capture do
 
     context 'if ffserver is not running' do
       it 'raises an error' do
-        allow(Capture).to receive(:ffserver?).and_return(false)
+        allow(Sunra::Utils::Capture).to receive(:ffserver?).and_return(false)
         expect { @capture.start }.to raise_error
       end
     end
@@ -111,7 +111,7 @@ describe Capture do
 
     context '#directory does not exist' do
       it 'attempts to create #directory' do
-        expect(Capture::FileUtils).to receive(:mkdir_p).once
+        expect(Sunra::Utils::Capture::FileUtils).to receive(:mkdir_p).once
         @capture.start
       end
     end
@@ -151,5 +151,4 @@ describe Capture do
       end
     end
   end
-
 end

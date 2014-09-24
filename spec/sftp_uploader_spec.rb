@@ -5,7 +5,7 @@ require 'rspec'
 require 'rspec/mocks'
 
 require_relative '../lib/sunra_utils/config/uploader.rb'
-require_relative '../lib/sunra_util/sftp_uploader'
+require_relative '../lib/sunra_utils/sftp_uploader'
 require_relative '../lib/sunra_utils/ps'
 
 include Sunra::Utils::PS
