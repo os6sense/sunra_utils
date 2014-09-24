@@ -6,7 +6,7 @@ describe Sunra::Utils::Config::Capture do
   end
 
   context 'after initialized' do
-    it { expect(capcon.storage_dir).to eq '/home/leej/sunra/recordings' }
+    it { expect(capcon.storage_dir).to eq '/home/testuser/CAPTURE_STORE' }
     it { expect(capcon.add_dir).to eq 'hls' }
     it { expect(capcon.url).to eq 'http://localhost:8090/liveaudio.mp3' }
     it { expect(capcon.extension).to eq 'mp3' }

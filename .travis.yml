@@ -1,4 +1,13 @@
 
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -y sshd
+  - sudo useradd -m -p $(openssl passwd -1 Wrafton2733210) testuser
+  - sudo mkdir /home/testuser/HLS_LIVE
+  - sudo mkdir /home/testuser/LOCAL_STORE
+  - sudo mkdir /home/testuser/CAPTURE_STORE
+  - sudo chown testuser /home/testuser/*
+
 language: ruby
 rvm:
   - "2.1.0"

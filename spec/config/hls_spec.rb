@@ -15,7 +15,7 @@ describe HLS do
   context "When working with the test file" do
     before(:all) { HLS.bootstrap_on_require "#{__dir__}/testfiles/hls_upload.yml" }
     it { expect(HLS.hls_server_address).to eq "localhost" }
-    it { expect(HLS.hls_base_directory).to eq "/mnt/RAID/HLS_LIVE" }
+    it { expect(HLS.hls_base_directory).to eq "/home/testuser/HLS_LIVE" }
     it { expect(HLS.recording_server_rest_url).to eq "http://localhost/recording_service" }
     it { expect(HLS.recording_server_api_key).to eq "a_key" }
     it { expect(HLS.sftp_ssl_key).to eq "testkey" }

@@ -21,7 +21,7 @@ describe Global do
     it { expect(Global.project_rest_api_url).to eq "http://localhost/project_manager" }
     it { expect(Global.recording_service_rest_api_url).to eq "http://localhost/recording_service"}
     it { expect(Global.recording_formats).to eq %w(mp4 mp3 mpg hls)}
-    it { expect(Global.local_store).to eq "/var/www/STORAGE" }
+    it { expect(Global.local_store).to eq "/home/testuser/LOCAL_STORE" }
   end
 end
 

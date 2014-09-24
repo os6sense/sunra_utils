@@ -11,4 +11,4 @@ project_rest_api_url: http://localhost/project_manager
 recording_service_rest_api_url: http://localhost/recording_service
 recording_formats: mp4, mp3, mpg, hls
 
-local_store: /var/www/STORAGE
+local_store: /home/testuser/LOCAL_STORE

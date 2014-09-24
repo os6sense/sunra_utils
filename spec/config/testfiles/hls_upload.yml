@@ -1,5 +1,5 @@
 hls_server_address: localhost
-hls_base_directory: /mnt/RAID/HLS_LIVE
+hls_base_directory: /home/testuser/HLS_LIVE
 recording_server_rest_url: http://localhost/recording_service
 recording_server_api_key: a_key
 sftp_ssl_key: testkey

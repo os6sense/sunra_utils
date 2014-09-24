@@ -1,4 +1,4 @@
-storage_dir: /home/leej/sunra/recordings
+storage_dir: /home/testuser/CAPTURE_STORE
 additional_dir: hls
 url: http://localhost:8090/liveaudio.mp3
 port: 8090
