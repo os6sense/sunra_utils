@@ -37,12 +37,11 @@ module Sunra
           @archive_server_address     = cf['archive_server_address']
           @archive_server_rest_url    = cf['archive_server_rest_url']
           @archive_server_port        = cf['archive_server_port']
-          @sftp_ssl_key               = cf['sftp_ssl_key']
-          @sftp_username              = cf['sftp_username']
-          @sftp_password              = cf['sftp_password']
           @archive_base_directory     = cf['archive_base_directory']
           @archive_api_key            = cf['archive_api_key']
           @start_time                 = cf['start_time']
+
+          sftp_options(cf)
         end
 
         bootstrap_on_require unless $debug

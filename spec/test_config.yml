@@ -1,0 +1,7 @@
+archive_server_address: localhost
+archive_server_port: 22
+sftp_ssl_key:
+sftp_username: testuser
+sftp_password: Wrafton2733210
+archive_base_directory: /home/testuser
+start_time: '01:00'

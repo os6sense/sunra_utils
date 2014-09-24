@@ -1,6 +1,7 @@
 
 before_install:
   - sudo apt-get update -qq
+  - sudo apt-get install -y apache2
   - sudo apt-get install -y ssh
   - sudo useradd -m -p $(openssl passwd -1 Wrafton2733210) testuser
   - sudo mkdir /home/testuser/HLS_LIVE

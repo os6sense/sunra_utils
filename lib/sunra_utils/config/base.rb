@@ -9,6 +9,12 @@ module Sunra
 
           YAML::load_file(cfn)
         end
+
+        def self.sftp_options(cf)
+          @sftp_ssl_key               = cf['sftp_ssl_key']
+          @sftp_username              = cf['sftp_username']
+          @sftp_password              = cf['sftp_password']
+        end
       end
     end
   end

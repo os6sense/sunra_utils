@@ -43,11 +43,10 @@ module Sunra
           @hls_server_address         = cf['hls_server_address']
           @recording_server_api_key   = cf['recording_server_api_key']
           @recording_server_rest_url  = cf['recording_server_rest_url']
-          @sftp_ssl_key               = cf['sftp_ssl_key']
-          @sftp_username              = cf['sftp_username']
-          @sftp_password              = cf['sftp_password']
           @presenter_class            = cf['presenter_class']
           @monitor_class              = cf['monitor_class']
+
+          sftp_options(cf)
         end
 
         bootstrap_on_require unless $debug
