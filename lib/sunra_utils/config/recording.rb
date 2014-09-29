@@ -3,6 +3,7 @@
 
 require 'yaml'
 require 'sunra_utils/config/capture'
+require_relative 'base'
 
 module Sunra
   module Utils
@@ -16,6 +17,26 @@ module Sunra
       # where as many of the sunra_config classes provide class based
       # access, recorders are *INSTANCE* based and hence must be instanciated.
       module Recording
+
+        class Service < Base
+          singleton_class.class_eval do
+            attr_reader :provider_class,
+                        :event_handler_class,
+                        :proxy_class,
+          end
+
+          protected
+
+          def self.bootstrap_on_require(cfn = '/etc/sunra/recording_service.yml')
+            cf = super
+
+            @provider_class        = cf['provider_class']
+            @event_handler_class   = cf['event_handler_class']
+            @proxy_class           = cf['proxy_class']
+          end
+
+          bootstrap_on_require unless $debug
+        end
 
         # ==== Description
         # Configuration for MP3 based Capture.
