@@ -22,7 +22,7 @@ module Sunra
           singleton_class.class_eval do
             attr_reader :provider_class,
                         :event_handler_class,
-                        :proxy_class,
+                        :proxy_class
           end
 
           protected
