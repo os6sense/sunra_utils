@@ -1,7 +1,7 @@
 require 'rest-client'
 require 'json'
 
-module Recording_db_proxy_test_helpers
+module DBProxyTestHelpers
   # Descrption::
   # Helper method to test the connection
   def test_connection

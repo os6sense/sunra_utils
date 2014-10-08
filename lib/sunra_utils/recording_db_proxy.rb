@@ -97,6 +97,7 @@ module Sunra
             base_url = "/projects/#{project_id}/bookings/#{booking_id}"
             return _create_recording(base_url, booking_id, recorders)
           rescue => msg
+            puts msg
             raise DBProxyError, msg
           end
 
