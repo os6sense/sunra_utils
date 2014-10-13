@@ -8,6 +8,7 @@ module DBProxyTestHelpers
     ::RestClient::Resource.new("#{@resource_url}").get
   end
 
+  # Redefine the create methods so that ... why?
   def _create_project(client_name, project_name)
     url = "#{@resource_url}/projects.json?auth_token=#{@api_key}"
 

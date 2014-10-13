@@ -1,17 +1,16 @@
 require 'date'
-require 'sunra_config/global'
 
+require_relative '../lib/sunra_utils/config/global'
 require_relative './spec_helper'
 require_relative '../lib/sunra_utils/recording_db_proxy'
 require_relative 'recording_db_proxy_test_helpers'
 
 # require_relative '../recorder'
 
-# In order to test the API against the development version
-# of the service, it is neccessary to create a temporary project
-# and booking. These methods don't really belong in the API
-# but may be of use beyond the scope of these tests, hence they
-# they have been extracted into a module
+# In order to test the API against the development version of the service, it
+# is neccessary to create a temporary project and booking. These methods don't
+# really belong in the API but may be of use beyond the scope of these tests,
+# hence they they have been extracted into a module
 #
 class Sunra::Utils::Recording::DBProxy
   include DBProxyTestHelpers
