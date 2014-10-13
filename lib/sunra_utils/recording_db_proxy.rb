@@ -196,15 +196,10 @@ module Sunra
               }
             )
             rescue Exception => msg
-              logger.info("***** REC_ID BUG1 ***************")
               logger.info( msg )
             end
 
-            logger.info("***** REC_ID BUG ***************")
-            logger.info( result )
             rec.format_id = Integer(JSON.parse(result)[-1]['id'])
-            logger.info( rec.format_id )
-            logger.info("***************************")
           end
         end
       end
