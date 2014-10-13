@@ -45,7 +45,7 @@ module Sunra
               super
               reopen
             end
-            j
+
             def fatal(*args)
               super
               reopen
@@ -72,6 +72,7 @@ module Sunra
           end
           module_function :logger
         end
+
         helpers Sunra::Utils::Logging::Passenger::Sinatra
       end
     end
