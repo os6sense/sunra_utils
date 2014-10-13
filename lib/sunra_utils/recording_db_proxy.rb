@@ -6,7 +6,7 @@ require 'json'
 require 'sunra_utils/logging'
 require 'sunra_utils/rest_client'
 
-require_relative '../../../sinatra_passenger'
+#require_relative '../../../sinatra_passenger'
 
 module Sunra
   module Utils
