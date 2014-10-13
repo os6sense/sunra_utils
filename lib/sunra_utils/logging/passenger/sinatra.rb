@@ -72,7 +72,7 @@ module Sunra
           end
           module_function :logger
         end
-        helpers Sunra::Utils::Lgging::Passenger::Sinatra
+        helpers Sunra::Utils::Logging::Passenger::Sinatra
       end
     end
   end
