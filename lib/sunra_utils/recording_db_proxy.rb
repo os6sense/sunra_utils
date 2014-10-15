@@ -97,11 +97,10 @@ module Sunra
             base_url = "/projects/#{project_id}/bookings/#{booking_id}"
             return _create_recording(base_url, booking_id, recorders)
           rescue => msg
-            puts msg
             raise DBProxyError, msg
           end
 
-          # TODO: Never reached
+          # TODO: Never reached ?
           return recording_id
         end
 
@@ -196,7 +195,7 @@ module Sunra
               }
             )
             rescue Exception => msg
-              logger.info( msg )
+              logger.info( msg ) # why info rather than error or raising?
             end
 
             rec.format_id = Integer(JSON.parse(result)[-1]['id'])
