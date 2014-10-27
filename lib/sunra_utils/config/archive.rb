@@ -18,7 +18,9 @@ module Sunra
           attr_accessor :mail_server,
                         :mail_server_port,
                         :mail_username,
-                        :mail_password
+                        :mail_password,
+                        :download_store,
+                        :upload_store
         end
 
          # ==== Description
@@ -35,6 +37,8 @@ module Sunra
           @mail_server_port   = cf['mail_server_port']
           @mail_username      = cf['mail_username']
           @mail_password      = cf['mail_password']
+          @download_store     = cf['download_store']
+          @upload_store       = cf['upload_store']
         end
 
         bootstrap_on_require unless $debug
