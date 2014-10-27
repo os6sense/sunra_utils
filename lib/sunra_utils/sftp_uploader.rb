@@ -1,6 +1,7 @@
 require 'net/sftp'
 require 'forwardable'
 
+
 require_relative 'sftp_upload_handler'
 
 module Sunra
@@ -23,7 +24,9 @@ module Sunra
 
         extend Forwardable
 
-        def_delegators :@upload_handler, :reset_status
+        def_delegators :@upload_handler, :reset_status,
+                                         :logger,
+                                         :logger=
 
         class UploaderError < StandardError; end
 

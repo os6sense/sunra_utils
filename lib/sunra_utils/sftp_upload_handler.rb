@@ -5,8 +5,6 @@ module Sunra
     module SFTP
       # Callbacks for Net::SFTP
       class UploadHandler
-        include Sunra::Utils::Logging
-
         attr_reader :local,
                     :remote,
                     :size,
@@ -18,12 +16,21 @@ module Sunra
           reset_status
         end
 
+        def logger=(val)
+          @logger = val
+        end
+
+        def logger
+          return @logger if @logger
+          Sunra::Utils::Logging.logger
+        end
+
         def on_open(_uploader, file)
           reset_status
           @local = file.local
           @remote = file.remote
           @size = file.size
-          logger.debug "Opening #{@local}##{@remote}"
+          logger.info "Opening #{@local}##{@remote}"
         end
 
         def on_put(_uploader, _file, offset, data)
@@ -42,7 +49,7 @@ module Sunra
 
         def on_finish(_uploader)
           @complete = true
-          logger.debug "Complete #{@remote}"
+          logger.info "Complete #{@remote}"
         end
 
         def to_h
