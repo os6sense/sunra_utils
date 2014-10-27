@@ -3,10 +3,7 @@
 require 'rest-client'
 require 'json'
 
-require 'sunra_utils/logging'
 require 'sunra_utils/rest_client'
-
-#require_relative '../../../sinatra_passenger'
 
 module Sunra
   module Utils
@@ -18,7 +15,7 @@ module Sunra
 
       # TODO: Merge this and Uploader::DB_PROXY, move into lib
       class DBProxy
-        include Sunra::Utils::Logging
+        attr_accessor :logger
 
         class DBProxyError < StandardError; end
 
@@ -182,8 +179,6 @@ module Sunra
 
           # new formats - one for each recorder
           recorders.each do | rec |
-            logger.debug( "Creating Format " + rec.format )
-
             begin
             result = new_format.post(
               recording_format: {
@@ -195,7 +190,7 @@ module Sunra
               }
             )
             rescue Exception => msg
-              logger.info( msg ) # why info rather than error or raising?
+              logger.error(msg) if logger
             end
 
             rec.format_id = Integer(JSON.parse(result)[-1]['id'])
