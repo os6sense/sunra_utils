@@ -25,7 +25,10 @@ module Sunra
                       :sftp_username,
                       :sftp_password,
                       :presenter_class,
-                      :monitor_class
+                      :monitor_class,
+                      :hls_delivery_server_rest_url,
+                      :hls_delivery_server_api_key,
+                      :upload_m3u8_file
         end
 
         protected
@@ -46,6 +49,9 @@ module Sunra
           @recording_server_rest_url  = cf['recording_server_rest_url']
           @presenter_class            = cf['presenter_class']
           @monitor_class              = cf['monitor_class']
+          @hls_delivery_server_rest_url = cf['hls_delivery_server_rest_url']
+          @hls_delivery_server_api_key  = cf['hls_delivery_server_api_key']
+          @upload_m3u8_file             = cf['upload_m3u8_file']
 
           sftp_options(cf)
         end
