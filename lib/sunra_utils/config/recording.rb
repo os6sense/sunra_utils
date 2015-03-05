@@ -35,7 +35,6 @@ module Sunra
             @event_handler_class   = cf['event_handler_class']
             @proxy_class           = cf['proxy_class']
             @auto_upload           = cf['auto_upload']
-
           end
 
           bootstrap_on_require unless $debug
