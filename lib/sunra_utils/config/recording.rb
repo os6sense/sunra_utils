@@ -22,7 +22,8 @@ module Sunra
           singleton_class.class_eval do
             attr_reader :provider_class,
                         :event_handler_class,
-                        :proxy_class
+                        :proxy_class,
+                        :auto_upload
           end
 
           protected
@@ -33,6 +34,8 @@ module Sunra
             @provider_class        = cf['provider_class']
             @event_handler_class   = cf['event_handler_class']
             @proxy_class           = cf['proxy_class']
+            @auto_upload           = cf['auto_upload']
+
           end
 
           bootstrap_on_require unless $debug

@@ -117,7 +117,7 @@ module Sunra
           end
         end
 
-        def update_format(recorder)
+        def update_format(recorder, upload = false)
           base_url = "/projects/#{recorder.project_id}/bookings/#{recorder.booking_id}"
 
           begin
@@ -128,7 +128,7 @@ module Sunra
                             ".json?auth_token=#{@api_key}")
 
             format.put( recording_format: { filesize: recorder.filesize,
-                                            upload: true})
+                                            upload: upload})
           rescue => msg
             raise DBProxyError, msg
           end
