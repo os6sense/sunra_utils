@@ -20,7 +20,8 @@ module Sunra
                       :base_directory,
                       :username,
                       :password,
-                      :upload_handler
+                      :upload_handler,
+                      :port
 
         extend Forwardable
 
@@ -34,6 +35,7 @@ module Sunra
         def initialize(host, username, directory, password = nil)
           @host, @username, @base_directory = host, username, directory
           @password = password
+          @port = 22
 
           # Create the default handler
           @_upload = nil
@@ -152,7 +154,8 @@ module Sunra
           if @password.nil?
             Net::SFTP.start(@host, @username,  &block)
           else
-            Net::SFTP.start(@host, @username, password: @password,  &block)
+            Net::SFTP.start(@host, @username,
+                            { password: @password, port: @port },  &block)
           end
         end
 
