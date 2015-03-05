@@ -128,7 +128,7 @@ module Sunra
                             ".json?auth_token=#{@api_key}")
 
             format.put( recording_format: { filesize: recorder.filesize,
-                                            upload: upload })
+                                            upload: true })
           rescue => msg
             raise DBProxyError, msg
           end
