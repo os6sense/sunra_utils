@@ -14,6 +14,7 @@ module Sunra
           @sftp_ssl_key               = cf['sftp_ssl_key']
           @sftp_username              = cf['sftp_username']
           @sftp_password              = cf['sftp_password']
+          @sftp_port                  = cf['sftp_port']
         end
       end
     end

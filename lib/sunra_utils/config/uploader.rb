@@ -8,7 +8,6 @@ require_relative 'base'
 module Sunra
   module Utils
     module Config
-
       # Description::
       # Provides access to configuration values that apply for the uploader.
       class Uploader < Base
@@ -19,7 +18,7 @@ module Sunra
                         :archive_api_key,
                         :archive_server_rest_url,
                         :sftp_ssl_key,
-                        #OR?
+                        # OR?
                         :sftp_username,
                         :sftp_password,
                         :start_time
@@ -32,7 +31,7 @@ module Sunra
         #
         # ==== Params
         # +cfn+:: Configuration File Name. /etc/sunra/config.yml by default.
-        def self.bootstrap_on_require cfn = "/etc/sunra/uploader.yml"
+        def self.bootstrap_on_require(cfn = '/etc/sunra/uploader.yml')
           cf = super
 
           @archive_server_address     = cf['archive_server_address']
