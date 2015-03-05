@@ -21,6 +21,7 @@ module Sunra
                         # OR?
                         :sftp_username,
                         :sftp_password,
+                        :sftp_port,
                         :start_time
         end
 
