@@ -1,29 +1,25 @@
 # File:: archive.rb
-# Description::
-# Loads configuration settings for the archive web service. The config file is
-# expected to reside in /etc/sunra/archive.yml. It is important to note
-# that the configuration is loaded on require.
-
 require_relative 'base'
 
 module Sunra
   module Utils
     module Config
-      require 'yaml'
-
       # ==== Description
-      # Provide access to Relay specific configuration paramameters.
+      # Loads configuration settings for the archive web service. The config
+      # file is expected to reside in /etc/sunra/archive.yml. It is important
+      # to note that the configuration is loaded on require.
       class Archive < Base
         singleton_class.class_eval do
           attr_accessor :mail_server,
                         :mail_server_port,
                         :mail_username,
                         :mail_password,
+                        :mail_from,
                         :download_store,
                         :upload_store
         end
 
-         # ==== Description
+        # ==== Description
         # When the module is required +bootstrap_on_require+ will be called.
         # This loads the configuration settings and makes them available as
         # class instances.
@@ -36,6 +32,7 @@ module Sunra
           @mail_server        = cf['mail_server']
           @mail_server_port   = cf['mail_server_port']
           @mail_username      = cf['mail_username']
+          @mail_from          = cf['mail_from']
           @mail_password      = cf['mail_password']
           @download_store     = cf['download_store']
           @upload_store       = cf['upload_store']

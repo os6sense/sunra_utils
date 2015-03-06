@@ -25,7 +25,8 @@ module Sunra
 
         # ==== Description::
         def initialize(cfn = 'config.yml')
-          cf              = YAML::load_file(cfn)
+          # cf              = YAML::load_file(cfn)
+          cf = super
 
           @storage_dir    = cf['storage_dir']
           @add_dir        = cf['additional_dir']
@@ -39,7 +40,6 @@ module Sunra
           @ffmpeg_opts    = cf['ffmpeg_opts']
           @ffmpeg_verb    = cf['ffmpeg_verb']
 
-          # sanity check
           check_values cfn
         end
 
@@ -49,7 +49,7 @@ module Sunra
         def check_values(cfn)
           [[@storage_dir, :storage_dir],
            [@url, :url],
-           [@extension, :extension]].each { | v | abort_if_nil(v[0], v[1]) }
+           [@extension, :extension]].each { |v| abort_if_nil(v[0], v[1]) }
           check_is_directory @storage_dir, cfn
         end
 

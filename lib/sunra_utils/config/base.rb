@@ -3,9 +3,13 @@ require 'yaml'
 module Sunra
   module Utils
     module Config
+      # ==== Description
+      # Provides a base set of config parameters for configuration classes
       class Base
         def self.bootstrap_on_require(cfn = nil)
-          fail "Global configuration file [#{cfn}] not found." unless File.exist? cfn
+          unless File.exist?(cfn)
+            fail "Configuration file [#{cfn}] not found."
+          end
 
           YAML::load_file(cfn)
         end
