@@ -8,12 +8,9 @@ require 'sunra_utils/rest_client'
 module Sunra
   module Utils
     module Recording
-
-      # Description::
+      # ==== Description::
       # Provide a proxy for the parts of the rest service which deal with the
       # saving of information about recordings.
-
-      # TODO: Merge this and Uploader::DB_PROXY, move into lib
       class DBProxy
         attr_accessor :logger
 
@@ -49,9 +46,8 @@ module Sunra
         def get_current_booking(studio_id)
           begin
             result = JSON.parse(::RestClient::Resource.new(
-                "#{@resource_url}/projects.json?ppf=present&studio_id=" +
-                "#{studio_id}&auth_token=#{@api_key}"
-              ).get)
+              "#{@resource_url}/projects.json?ppf=present&studio_id=" \
+                "#{studio_id}&auth_token=#{@api_key}").get)
           rescue => msg
             raise DBProxyError, msg
           end
@@ -69,8 +65,8 @@ module Sunra
 
           begin
             recordings = JSON.parse(::RestClient::Resource.new(
-                            "#{@resource_url}#{base_url}/recordings.json" +
-                            "?auth_token=#{@api_key}").get)
+              "#{@resource_url}#{base_url}/recordings.json" \
+                "?auth_token=#{@api_key}").get)
 
             return recordings.size - 1
           rescue => msg
@@ -111,30 +107,32 @@ module Sunra
 
             recording.put(recording: { end_time: DateTime.now })
 
-            recorders.each { | rec | update_format(rec) }
+            recorders.each { |rec| update_format(rec) }
           rescue => msg
             raise DBProxyError, msg
           end
         end
 
-        def update_format(recorder, upload = false)
-          base_url = "/projects/#{recorder.project_id}/bookings/#{recorder.booking_id}"
+        def update_format(recorder, do_upload)
+          base_url = "/projects/#{recorder.project_id}/bookings/" \
+            "#{recorder.booking_id}"
 
           begin
             format = ::RestClient::Resource.new(
-                            "#{@resource_url}#{base_url}/recordings/" +
-                            "#{recorder.recording_id}/recording_formats/" +
-                            "#{recorder.format_id}" +
-                            ".json?auth_token=#{@api_key}")
+              "#{@resource_url}#{base_url}/recordings/" \
+              "#{recorder.recording_id}/recording_formats/" \
+              "#{recorder.format_id}" \
+              ".json?auth_token=#{@api_key}")
 
-            format.put( recording_format: { filesize: recorder.filesize,
-                                            upload: true })
+            format.put(recording_format: { filesize: recorder.filesize,
+                                           upload: do_upload })
           rescue => msg
             raise DBProxyError, msg
           end
         end
 
-  protected
+        protected
+
         # Description::
         # Make a rest call to the projects rails app creating a new entry
         # under /project/p_id/booking/b_id/recording
@@ -143,21 +141,20 @@ module Sunra
         # Returns:: The id of the recording created
         def _create_recording(base_url, booking_id, recorders)
           new_recording =
-            ::RestClient::Resource.new("#{@resource_url}#{base_url}" +
-                                       "/recordings.json?auth_token=#{@api_key}")
+            ::RestClient::Resource.new("#{@resource_url}#{base_url}" \
+              "/recordings.json?auth_token=#{@api_key}")
 
-            result = new_recording.post(
-                recording:  {
-                  booking_id: booking_id,
-                  start_time: recorders[0].start_time,
-                  group_number: recording_count(recorders[0].project_id,
-                                                recorders[0].booking_id) + 1,
-                  base_filename: recorders[0].base_filename
-                }
-            )
+          result = new_recording.post(
+            recording:  {
+              booking_id: booking_id,
+              start_time: recorders[0].start_time,
+              group_number: recording_count(recorders[0].project_id,
+                                            recorders[0].booking_id) + 1,
+              base_filename: recorders[0].base_filename
+            })
 
           recording_id = Integer(JSON.parse(result)[-1]['id'])
-          recorders.each { | rec | rec.recording_id = recording_id }
+          recorders.each { |rec| rec.recording_id = recording_id }
 
           _create_formats(base_url, recording_id, recorders)
           return recording_id
@@ -174,22 +171,21 @@ module Sunra
         # Returns:: true on success
         def _create_formats(base_url, recording_id, recorders)
           new_format = ::RestClient::Resource.new(
-             "#{@resource_url}#{base_url}/recordings/#{recording_id}" +
-              "/recording_formats.json?auth_token=#{@api_key}"
-          )
+            "#{@resource_url}#{base_url}/recordings/#{recording_id}" \
+            "/recording_formats.json?auth_token=#{@api_key}")
 
           # new formats - one for each recorder
-          recorders.each do | rec |
+          recorders.each do |rec|
             begin
-            result = new_format.post(
-              recording_format: {
-                recording_id: recording_id,
-                start_time: rec.start_time,
-                format: rec.format,
-                directory: rec.directory,
-                filesize: 0
-              }
-            )
+              result = new_format.post(
+                recording_format: {
+                  recording_id: recording_id,
+                  start_time: rec.start_time,
+                  format: rec.format,
+                  directory: rec.directory,
+                  filesize: 0
+                }
+              )
             rescue Exception => msg
               logger.error(msg) if logger
             end
@@ -201,19 +197,3 @@ module Sunra
     end
   end
 end
-
-
-
-# TODO - Mock the DB **PROPERLY** and add this as a test
-#if __FILE__ == $0
-  #require 'sunra_config/global'
-  #@global_config = Sunra::Config::Global
-  #@db_api = Sunra::Recording::DB_PROXY.new(@global_config.api_key,
-                                           #@global_config.project_rest_api_url)
-
-  ## THIS SHOULD FAIL - broken project id - move this test to rails.
-  #puts @db_api.recording_count("xdsa6258fe1e271518e8f76e74f3aae3426c1d7aaf020cbd6edffe5dd9a7769a41100255f236", "3")
-
-  ## THIS SHOULD PASS - working project id
-  #puts @db_api.recording_count("6258fe1e271518e8f76e74f3aae3426c1d7aaf020cbd6edffe5dd9a7769a41100255f236", "3")
-#end
