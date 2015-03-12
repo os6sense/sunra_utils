@@ -22,7 +22,8 @@ module Sunra
                         :sftp_username,
                         :sftp_password,
                         :sftp_port,
-                        :start_time
+                        :start_time,
+                        :uploader_service_url
         end
 
         # ==== Description
@@ -41,6 +42,7 @@ module Sunra
           @archive_base_directory     = cf['archive_base_directory']
           @archive_api_key            = cf['archive_api_key']
           @start_time                 = cf['start_time']
+          @uploader_service_url       = cf['uploader_service_url']
 
           sftp_options(cf)
         end
