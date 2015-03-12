@@ -25,8 +25,8 @@ module Sunra
 
         # ==== Description::
         def initialize(cfn = 'config.yml')
-          # cf              = YAML::load_file(cfn)
-          cf = super
+          cf              = YAML::load_file(cfn)
+          #cf = super()
 
           @storage_dir    = cf['storage_dir']
           @add_dir        = cf['additional_dir']
