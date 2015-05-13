@@ -152,10 +152,11 @@ module Sunra
         # Helper, calls start and wraps the block
         def start(&block)
           if @password.nil?
+            puts "NILL PASSWORD"
             Net::SFTP.start(@host, @username,  &block)
           else
             Net::SFTP.start(@host, @username,
-                            { password: @password, port: @port },  &block)
+                            { password: @password, port: @port, number_of_password_prompts: 0 },  &block)
           end
         end
 
