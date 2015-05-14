@@ -21,7 +21,8 @@ module Sunra
                       :username,
                       :password,
                       :upload_handler,
-                      :port
+                      :port,
+                      :keys
 
         extend Forwardable
 
@@ -36,6 +37,7 @@ module Sunra
           @host, @username, @base_directory = host, username, directory
           @password = password
           @port = 22
+          @keys = []
 
           # Create the default handler
           @_upload = nil
@@ -149,17 +151,24 @@ module Sunra
         private
 
         # ==== Description
-        # Helper, calls start and wraps the block
+        # Helper, calls start and wraps the block.
+        # NOTE: I've been relying on the fallback to using the default key
+        # for public key authentication however have added a keys attribute
+        # to allow keys to be added. This is quick and dirty since I have only
+        # a few days left to work on this.
         def start(&block)
-          puts "START"
-          puts "PASSWORD #{password}"
-
           if @password.nil?
-            puts "NILL PASSWORD"
-            Net::SFTP.start(@host, @username,  &block)
+            if @keys.empty?
+              Net::SFTP.start(@host, @username,  &block)
+            else
+              Net::SFTP.start(@host, @username, { keys: @keys }, &block)
+            end
           else
-            Net::SFTP.start(@host, @username,
-                            { password: @password, port: @port, number_of_password_prompts: 0 },  &block)
+            opts = { password: @password,
+                     port: @port,
+                     number_of_password_prompts: 0 }
+
+            Net::SFTP.start(@host, @username, opts, &block)
           end
         end
 
