@@ -15,6 +15,7 @@ module Sunra
                         :mail_username,
                         :mail_password,
                         :mail_from,
+                        :default_bcc,
                         :download_store,
                         :upload_store
         end
@@ -34,6 +35,7 @@ module Sunra
           @mail_username      = cf['mail_username']
           @mail_from          = cf['mail_from']
           @mail_password      = cf['mail_password']
+          @default_bcc        = cf['default_bcc']
           @download_store     = cf['download_store']
           @upload_store       = cf['upload_store']
         end
